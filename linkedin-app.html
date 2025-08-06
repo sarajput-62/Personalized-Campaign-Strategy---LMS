@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ready to Reach Your Audience?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.css" xintegrity="sha512-crVMDYhGyYkS4y/eh1S/LfsT62cQ2H6U27hT7iNyTs/3gLzAb2O6TEH5+mm9qI03O7B0+Cj1G9U9ZlYv+kAjSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .step-active {
+            border-color: #0A66C2;
+            color: #0A66C2;
+        }
+        .step-inactive {
+            border-color: #e5e7eb;
+            color: #6b7280;
+        }
+        .help-article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0A66C2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary .lucide-chevron-down {
+            transform: rotate(180deg);
+        }
+        .sidebar-nav a, .sidebar-nav summary {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        .sidebar-nav a:hover, .sidebar-nav summary:hover {
+            background-color: #f3f4f6;
+        }
+        .sidebar-nav .dropdown-item {
+            padding-left: 1.5rem;
+            font-weight: 400;
+        }
+        .sidebar-nav .active-link {
+             background-color: #eff6ff;
+             color: #1d4ed8;
+             font-weight: 600;
+        }
+        .tag {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .tag-remove {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            color: #4f46e5;
+        }
+        .autocomplete-suggestions {
+            border: 1px solid #d1d5db;
+            border-top: none;
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: white;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+        .suggestion-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background-color: #f3f4f6;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2563eb;
+        }
+        input:checked + .slider:before {
+            transform: translateX(14px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <header class="bg-white shadow-sm p-3 flex justify-between items-center sticky top-0 z-10">
+        <div class="flex items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn Logo" class="h-8 w-auto">
+            <div class="border-l h-6 mx-3"></div>
+            <span class="text-lg font-semibold text-gray-700">Ads | Campaign Manager</span>
+        </div>
+        <div class="flex items-center space-x-5 mr-4">
+            <i data-lucide="bell" class="text-gray-600 hover:text-gray-900 cursor-pointer"></i>
+            <i data-lucide="help-circle" class="text-gray-600 hover:text-gray-900 cursor-pointer"></i>
+            <div class="w-8 h-8 bg-gray-300 rounded-full cursor-pointer"></div>
+        </div>
+    </header>
+
+    <div class="flex" style="height: calc(100vh - 57px);">
+        <!-- Left Sidebar -->
+        <aside class="w-72 bg-white shadow-md hidden md:flex flex-col">
+            <div class="p-4 border-b">
+                <h2 class="text-sm font-semibold text-gray-800">Sanskar's Ad account</h2>
+                <p class="text-xs text-gray-500">509893311</p>
+            </div>
+            <nav class="flex-1 overflow-y-auto sidebar-nav text-sm">
+                <a href="#">Overview</a>
+
+                <details class="w-full" open>
+                    <summary class="cursor-pointer flex justify-between items-center">
+                        <span>Plan</span>
+                        <i data-lucide="chevron-down" class="transition-transform"></i>
+                    </summary>
+                    <div class="pl-4">
+                        <a href="#" class="dropdown-item">Audiences</a>
+                        <a href="#" class="dropdown-item">Companies</a>
+                        <a href="#" class="dropdown-item">Media plan</a>
+                        <a href="#" class="dropdown-item pl-8 active-link">Personalized Campaign Strategy</a>
+                    </div>
+                </details>
+
+                <a href="#">Advertise</a>
+                <a href="#">Experiment</a>
+
+                <details class="w-full">
+                    <summary class="cursor-pointer flex justify-between items-center">
+                        <span>Measurement <span class="ml-2 text-xs bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full">NEW</span></span>
+                        <i data-lucide="chevron-down" class="transition-transform"></i>
+                    </summary>
+                    <div class="pl-4">
+                        <a href="#" class="dropdown-item">Insights</a>
+                        <a href="#" class="dropdown-item">Conversion tracking</a>
+                    </div>
+                </details>
+                
+                <details class="w-full">
+                    <summary class="cursor-pointer flex justify-between items-center">
+                        <span>Data</span>
+                        <i data-lucide="chevron-down" class="transition-transform"></i>
+                    </summary>
+                    <div class="pl-4">
+                        <a href="#" class="dropdown-item">Signals manager</a>
+                        <a href="#" class="dropdown-item">Website actions</a>
+                    </div>
+                </details>
+
+                <a href="#">Recommendations</a>
+
+                <details class="w-full">
+                    <summary class="cursor-pointer flex justify-between items-center">
+                        <span>Assets</span>
+                        <i data-lucide="chevron-down" class="transition-transform"></i>
+                    </summary>
+                    <div class="pl-4">
+                        <a href="#" class="dropdown-item">Lead generation forms</a>
+                        <a href="#" class="dropdown-item">Landing pages</a>
+                        <a href="#" class="dropdown-item">Asset history</a>
+                        <a href="#" class="dropdown-item">Conversations</a>
+                    </div>
+                </details>
+
+                <details class="w-full">
+                    <summary class="cursor-pointer flex justify-between items-center">
+                        <span>Account settings</span>
+                        <i data-lucide="chevron-down" class="transition-transform"></i>
+                    </summary>
+                    <div class="pl-4">
+                        <a href="#" class="dropdown-item">Manage access</a>
+                        <a href="#" class="dropdown-item">Billing</a>
+                        <a href="#" class="dropdown-item">Edit account</a>
+                        <a href="#" class="dropdown-item">URL parameters</a>
+                    </div>
+                </details>
+                
+                 <div class="mt-auto pt-4 border-t">
+                    <a href="#">Company page</a>
+                    <a href="#">Business Manager</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 md:p-10 overflow-y-auto">
+            <div id="ai-assistant-container" class="max-w-4xl">
+                <!-- AI Assistant Steps will be rendered here -->
+            </div>
+
+            <!-- Campaign Manager Views -->
+            <div id="campaign-manager-container" class="hidden w-full">
+                <!-- Dashboard View -->
+                <div id="campaign-manager-dashboard" class="hidden"></div>
+                <!-- Edit Campaign Group View -->
+                <div id="edit-campaign-group-view" class="hidden"></div>
+                <!-- Edit Campaign View -->
+                <div id="edit-campaign-view" class="hidden"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        const initialTargetingState = {
+            location: { type: 'recentOrPermanent', values: [] },
+            company: { industries: [], companySize: [], companyNames: [], companyCategory: [], companyConnections: false, companyFollowers: false, companyGrowthRate: [], companyRevenue: [] },
+            jobExperience: { jobTitles: [], jobSeniorities: [], yearsOfExperience: [], jobFunctions: [], memberSkills: [] },
+            education: { degrees: [], fieldsOfStudy: [], memberSchools: [] },
+            demographics: { memberAge: [], memberGender: [] },
+            interests: { memberInterests: [], memberGroups: [] }
+        };
+
+        const state = {
+            currentView: 'assistant', // 'assistant' or 'manager'
+            assistantStep: 1,
+            managerView: 'dashboard', // 'dashboard', 'editGroup', 'editCampaign'
+            campaignDescription: '',
+            recommendations: null,
+            isEditing: false,
+            finalSelection: {
+                objective: '',
+                targeting: JSON.parse(JSON.stringify(initialTargetingState)),
+                adFormat: '',
+                recommendedArticleIds: []
+            }
+        };
+
+        const allObjectives = [
+            { id: 'brandAwareness', name: 'Brand Awareness', funnel: 'Awareness', description: 'Tell more people about your products, services, or organization.' },
+            { id: 'websiteVisits', name: 'Website Visits', funnel: 'Consideration', description: 'Drive traffic to your website or marketing landing pages.' },
+            { id: 'engagement', name: 'Engagement', funnel: 'Consideration', description: 'Increase engagement on your content such as likes, comments, shares, or LinkedIn Page follows.' },
+            { id: 'videoViews', name: 'Video Views', funnel: 'Consideration', description: 'Share videos with more people to get more views on your content.' },
+            { id: 'leadGeneration', name: 'Lead Generation', funnel: 'Conversions', description: 'Capture qualified leads on LinkedIn using a Lead Gen Form pre-filled with profile data.' },
+            { id: 'websiteConversions', name: 'Website Conversions', funnel: 'Conversions', description: 'Encourage valuable actions and capture leads on your website.' },
+            { id: 'jobApplicants', name: 'Job Applicants', funnel: 'Conversions', description: 'Tell more people about relevant job opportunities at your company.' },
+            { id: 'talentLeads', name: 'Talent Leads', funnel: 'Conversions', description: 'Generate leads of candidates interested in career opportunities at your company (for Recruiter contracts).' },
+        ];
+
+        const allAdFormats = {
+            brandAwareness: ['Single Image Ad', 'Carousel Image Ad', 'Video Ad', 'Event Ad', 'Text Ad', 'Spotlight Ad', 'Follower Ad', 'Document Ad', 'Thought Leader Ad'],
+            websiteVisits: ['Single Image Ad', 'Carousel Image Ad', 'Video Ad', 'Event Ad', 'Text Ad', 'Spotlight Ad', 'Message Ad', 'Conversation Ad', 'Document Ad', 'Follower Ad'],
+            engagement: ['Single Image Ad', 'Carousel Image Ad', 'Video Ad', 'Event Ad', 'Follower Ad', 'Document Ad', 'Thought Leader Ad'],
+            videoViews: ['Video Ad'],
+            leadGeneration: ['Single Image Ad', 'Carousel Image Ad', 'Video Ad', 'Message Ad', 'Conversation Ad', 'Document Ad', 'Follower Ad'],
+            websiteConversions: ['Single Image Ad', 'Carousel Image Ad', 'Video Ad', 'Text Ad', 'Message Ad', 'Spotlight Ad', 'Document Ad'],
+            jobApplicants: ['Single Job Ad', 'Jobs Ad', 'Single Image Ad', 'Spotlight Ad'],
+            talentLeads: ['Single Image Ad', 'Message Ad', 'Carousel Image Ad']
+        };
+
+        const helpArticles = [
+            // Objective Articles
+            { id: 'obj_brandAwareness', title: 'Brand awareness ad objective', url: 'https://www.linkedin.com/help/lms/answer/a422075', category: 'brandAwareness', snippet: 'Learn how to tell more people about your products, services, or organization.' },
+            { id: 'obj_websiteVisits', title: 'Website visits ad objective', url: 'https://www.linkedin.com/help/lms/answer/a420934', category: 'websiteVisits', snippet: 'Discover strategies to drive traffic to your website or marketing landing pages.' },
+            { id: 'obj_engagement', title: 'Engagement ad objective', url: 'https://www.linkedin.com/help/lms/answer/a422337', category: 'engagement', snippet: 'Find out how to increase engagement on your content such as likes, comments, and shares.' },
+            { id: 'obj_leadGeneration', title: 'Lead generation ad objective', url: 'https://www.linkedin.com/help/lms/answer/a422440', category: 'leadGeneration', snippet: 'Learn to capture qualified leads with Lead Gen Forms pre-filled with LinkedIn profile data.' },
+            { id: 'obj_websiteConversions', title: 'Website conversions ad objective', url: 'https://www.linkedin.com/help/lms/answer/a422871', category: 'websiteConversions', snippet: 'Encourage valuable actions and capture leads directly on your website.' },
+            { id: 'obj_videoViews', title: 'Video views ad objective', url: 'https://www.linkedin.com/help/lms/answer/a423767', category: 'videoViews', snippet: 'Get best practices for sharing videos and getting more views on your content.' },
+            { id: 'obj_jobApplicants', title: 'Job Applicants – Ad Objective Overview', url: 'https://www.linkedin.com/help/lms/answer/a426278', category: 'jobApplicants', snippet: 'Learn how to tell more people about relevant job opportunities at your company.' },
+
+            // Ad Format Articles
+            { id: 'ad_single_image_ad', title: 'Single image ads', url: 'https://www.linkedin.com/help/lms/answer/a420760', adType: 'Single Image Ad', snippet: 'Get details and specifications for creating effective single image ads.' },
+            { id: 'ad_carousel_image_ad', title: 'Carousel ads', url: 'https://www.linkedin.com/help/lms/answer/a423087', adType: 'Carousel Image Ad', snippet: 'Learn how to showcase multiple images in a single, swipeable ad unit.' },
+            { id: 'ad_thought_leader_ad', title: 'Thought leader ads', url: 'https://www.linkedin.com/help/lms/answer/a1399568', adType: 'Thought Leader Ad', snippet: 'Promote content from an influential member to build brand trust and awareness.' },
+            { id: 'ad_video_ad', title: 'Video ads', url: 'https://www.linkedin.com/help/lms/answer/a423762', adType: 'Video Ad', snippet: 'Discover best practices for creating engaging and effective video ad campaigns.' },
+            { id: 'ad_event_ad', title: 'Event ads', url: 'https://www.linkedin.com/help/lms/answer/a459550', adType: 'Event Ad', snippet: 'Learn how to promote your LinkedIn Events to drive registrations and attendance.' },
+            { id: 'ad_text_ad', title: 'Text ads', url: 'https://www.linkedin.com/help/lms/answer/a424670', adType: 'Text Ad', snippet: 'Get specifications and tips for creating concise and effective text-based ads.' },
+            { id: 'ad_spotlight_ad', title: 'Spotlight ads', url: 'https://www.linkedin.com/help/lms/answer/a420806', adType: 'Spotlight Ad', snippet: 'Learn how to run personalized ads that feature a member’s profile photo.' },
+            { id: 'ad_follower_ad', title: 'Follower ads', url: 'https://www.linkedin.com/help/lms/answer/a423314', adType: 'Follower Ad', snippet: 'Promote your LinkedIn Page and encourage members to follow you with a single click.' },
+            { id: 'ad_document_ad', title: 'LinkedIn document ads', url: 'https://www.linkedin.com/help/lms/answer/a737898', adType: 'Document Ad', snippet: 'Share documents like PDFs or presentations to generate leads and share insights.' },
+            
+            // Targeting Articles
+            { id: 'targeting_options', title: 'Targeting options for LinkedIn Ads', url: 'https://www.linkedin.com/help/lms/answer/a424655', category: 'targeting', snippet: 'An overview of all the ways you can reach your ideal audience on LinkedIn.' },
+            { id: 'targeting_size', title: 'Target audience size best practices', url: 'https://www.linkedin.com/help/lms/answer/a423690', category: 'targeting', snippet: 'Learn how to find the sweet spot for your audience size to maximize results.' },
+        ];
+        
+        const autocompleteData = {
+            locations: [ 'United States', 'India', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Brazil', 'Japan', 'China', 'Mexico', 'Netherlands', 'Singapore', 'South Africa', 'Spain', 'Sweden', 'Switzerland', 'United Arab Emirates', 'California', 'New York', 'Texas', 'Florida', 'Illinois', 'London', 'Paris', 'Tokyo', 'Sydney', 'Bangalore', 'Mumbai', 'Delhi', 'Dubai', 'Toronto', 'Vancouver', 'Berlin', 'San Francisco' ],
+            industries: ['Information Technology and Services', 'Computer Software', 'Internet', 'Marketing and Advertising', 'Financial Services', 'Hospitality', 'Health, Wellness and Fitness', 'Retail', 'Education Management', 'Real Estate', 'Management Consulting', 'Human Resources', 'Automotive', 'Design'],
+            skills: ['Python', 'JavaScript', 'Data Science', 'Machine Learning', 'React.js', 'Node.js', 'Project Management', 'Digital Marketing', 'Cloud Computing', 'SQL', 'Java', 'C++', 'Go', 'Figma', 'Adobe Photoshop'],
+            jobTitles: ['Software Engineer', 'Product Manager', 'Marketing Manager', 'Data Scientist', 'Sales Representative', 'Human Resources Manager', 'Graphic Designer', 'Accountant', 'Project Manager', 'Business Analyst'],
+            companyNames: ['Google', 'Microsoft', 'Apple', 'Amazon', 'Meta', 'LinkedIn', 'Netflix', 'Tesla', 'Salesforce', 'Adobe', 'Oracle', 'IBM'],
+            degrees: ['Bachelors Degree', 'Masters Degree', 'PhD', 'MBA', 'Associate Degree', 'Doctor of Medicine (MD)'],
+            fieldsOfStudy: ['Computer Science', 'Marketing', 'Business Administration', 'Finance', 'Engineering', 'Graphic Design', 'Economics', 'Communications'],
+            memberSchools: ['Stanford University', 'Harvard University', 'MIT', 'University of California, Berkeley', 'Indian Institute of Technology', 'University of Oxford', 'University of Cambridge'],
+            memberInterests: ['Technology', 'Marketing', 'Finance', 'Entrepreneurship', 'Artificial Intelligence', 'Venture Capital', 'User Experience (UX)'],
+            memberGroups: ['Marketing Professionals', 'Software Developers', 'Startup Founders', 'Data Science Community', 'UX Designers', 'Product Managers Community']
+        };
+
+
+        // DOM Elements
+        const aiAssistantContainer = document.getElementById('ai-assistant-container');
+        const campaignManagerContainer = document.getElementById('campaign-manager-container');
+        const campaignManagerDashboard = document.getElementById('campaign-manager-dashboard');
+        const editCampaignGroupView = document.getElementById('edit-campaign-group-view');
+        const editCampaignView = document.getElementById('edit-campaign-view');
+
+        function updateUI() {
+            aiAssistantContainer.classList.toggle('hidden', state.currentView !== 'assistant');
+            campaignManagerContainer.classList.toggle('hidden', state.currentView !== 'manager');
+
+            if (state.currentView === 'assistant') {
+                renderAssistantView();
+            } else if (state.currentView === 'manager') {
+                renderManagerView();
+            }
+        }
+
+        function renderAssistantView() {
+            aiAssistantContainer.innerHTML = `
+                <h1 class="text-3xl font-bold text-gray-900">Ready to Reach Your Audience?</h1>
+                <p class="mt-2 text-gray-600">Let's create a new campaign. Describe your goals, and our AI will help you build the perfect strategy.</p>
+                <!-- Stepper -->
+                <div class="mt-8">
+                    <div class="flex items-center justify-center sm:justify-start">
+                        <div id="step-1-indicator" class="flex items-center ${state.assistantStep >= 1 ? 'step-active' : 'step-inactive'}">
+                            <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold">1</div>
+                            <p class="ml-2 hidden sm:block font-semibold">Describe</p>
+                        </div>
+                        <div class="flex-1 border-t-2 border-gray-200 mx-4"></div>
+                        <div id="step-2-indicator" class="flex items-center ${state.assistantStep >= 2 ? 'step-active' : 'step-inactive'}">
+                            <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold">2</div>
+                            <p class="ml-2 hidden sm:block font-semibold">Customize</p>
+                        </div>
+                        <div class="flex-1 border-t-2 border-gray-200 mx-4"></div>
+                        <div id="step-3-indicator" class="flex items-center ${state.assistantStep >= 3 ? 'step-active' : 'step-inactive'}">
+                            <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold">3</div>
+                            <p class="ml-2 hidden sm:block font-semibold">Preview & Create</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Describe in Your Words -->
+                <div id="step-1" class="${state.assistantStep === 1 ? '' : 'hidden'} mt-8 fade-in">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-gray-800">Describe in Your Words</h2>
+                        <p class="mt-2 text-gray-500">Tell us what you want to achieve. For example: "I want to promote my webinar to python developers at high-growth startups."</p>
+                        <textarea id="campaign-description" class="mt-4 w-full h-32 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Describe your campaign goals here...">${state.campaignDescription}</textarea>
+                        <button id="get-recommendations-btn" class="mt-6 w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow">
+                            Get AI Recommendations
+                        </button>
+                    </div>
+                     <div id="loading-indicator" class="hidden mt-8 flex flex-col items-center justify-center">
+                        <div class="loader"></div>
+                        <p class="mt-4 text-gray-600 font-semibold">Our AI is crafting your campaign strategy...</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Customize Recommendations -->
+                <div id="step-2" class="${state.assistantStep === 2 ? '' : 'hidden'} mt-8 fade-in">
+                    <!-- Step 2 content will be rendered by renderRecommendations() -->
+                </div>
+
+                <!-- Step 3: Preview & Launch -->
+                <div id="step-3" class="${state.assistantStep === 3 ? '' : 'hidden'} mt-8 fade-in">
+                    <!-- Step 3 content will be rendered by renderPreview() -->
+                </div>
+            `;
+            lucide.createIcons();
+            addAssistantEventListeners();
+
+            if (state.assistantStep === 2) {
+                renderRecommendations();
+                renderEditMode();
+            } else if (state.assistantStep === 3) {
+                renderPreview();
+            }
+        }
+
+        function renderManagerView() {
+            campaignManagerDashboard.classList.toggle('hidden', state.managerView !== 'dashboard');
+            editCampaignGroupView.classList.toggle('hidden', state.managerView !== 'editGroup');
+            editCampaignView.classList.toggle('hidden', state.managerView !== 'editCampaign');
+
+            if (state.managerView === 'dashboard') {
+                renderCampaignManagerDashboard();
+            } else if (state.managerView === 'editGroup') {
+                renderEditCampaignGroup();
+            } else if (state.managerView === 'editCampaign') {
+                renderEditCampaign();
+            }
+        }
+
+        async function handleGetRecommendations() {
+            const descriptionInput = document.getElementById('campaign-description');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const step1Div = document.getElementById('step-1');
+
+            state.campaignDescription = descriptionInput.value;
+            if (!state.campaignDescription.trim()) {
+                alert('Please describe your campaign goals.');
+                return;
+            }
+            
+            step1Div.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+
+            await new Promise(resolve => setTimeout(resolve, 2500)); 
+
+            state.recommendations = mockAIAnalysis(state.campaignDescription);
+            state.finalSelection = JSON.parse(JSON.stringify(state.recommendations));
+            state.assistantStep = 2;
+            updateUI();
+        }
+
+        function mockAIAnalysis(description) {
+            const lowercased = description.toLowerCase();
+            let recs = {
+                objective: 'websiteVisits',
+                targeting: JSON.parse(JSON.stringify(initialTargetingState)),
+                adFormat: '',
+                recommendedArticleIds: []
+            };
+
+            // Objective Analysis
+            if (lowercased.includes('tell more people') || lowercased.includes('reach')) recs.objective = 'brandAwareness';
+            else if (lowercased.includes('drive traffic') || lowercased.includes('landing page clicks')) recs.objective = 'websiteVisits';
+            else if (lowercased.includes('video views') || lowercased.includes('show my video')) recs.objective = 'videoViews';
+            else if (lowercased.includes('event') || lowercased.includes('webinar') || lowercased.includes('conference')) recs.objective = 'engagement';
+            else if (lowercased.includes('job') || lowercased.includes('applicant') || lowercased.includes('hire') || lowercased.includes('recruit')) recs.objective = 'jobApplicants';
+            else if (lowercased.includes('talent')) recs.objective = 'talentLeads';
+            else if (lowercased.includes('lead') || lowercased.includes('sign-up') || lowercased.includes('demo')) recs.objective = 'leadGeneration';
+            else if (lowercased.includes('conversion')) recs.objective = 'websiteConversions';
+            else if (lowercased.includes('brand') || lowercased.includes('aware')) recs.objective = 'brandAwareness';
+
+            // Targeting Refinements
+            if (lowercased.includes('b2b') || lowercased.includes('software') || lowercased.includes('saas')) {
+                recs.targeting.company.industries = ['Computer Software', 'Information Technology and Services', 'Internet'];
+                recs.targeting.jobExperience.jobSeniorities = ['Manager', 'Director', 'VP', 'CXO'];
+            }
+            if (lowercased.includes('high-growth') || lowercased.includes('fast-growing') || lowercased.includes('startup')) {
+                recs.targeting.company.companyGrowthRate = ['10%+ growth'];
+                recs.targeting.company.companySize = ['11-50 employees', '51-200 employees'];
+            }
+            const skills = ['python developer', 'data scientist', 'javascript engineer', 'react developer'];
+            const foundSkill = skills.find(skill => lowercased.includes(skill));
+            if(foundSkill) {
+                recs.targeting.jobExperience.memberSkills = [foundSkill.replace(/\b\w/g, l => l.toUpperCase())];
+                recs.targeting.jobExperience.jobTitles = ['Software Engineer', 'Developer', 'Programmer'];
+            }
+            if (lowercased.includes('marketing manager')) recs.targeting.jobExperience.jobTitles = ['Marketing Manager', 'Digital Marketing Specialist', 'CMO'];
+            if (lowercased.includes('senior')) recs.targeting.jobExperience.jobSeniorities = ['Senior', 'Manager', 'Director'];
+            if (lowercased.includes('tech industry')) recs.targeting.company.industries = ['Computer Software', 'Internet', 'Information Technology and Services'];
+            if (lowercased.includes('5-10 years') || lowercased.includes('5 to 10 years')) recs.targeting.jobExperience.yearsOfExperience = ['6-10 Years'];
+            
+            const locationKeywords = { 'us': 'United States', 'united states': 'United States', 'uk': 'United Kingdom', 'united kingdom': 'United Kingdom', 'india': 'India', 'canada': 'Canada', 'california': 'California' };
+            const foundLocations = Object.keys(locationKeywords).filter(key => lowercased.includes(key)).map(key => locationKeywords[key]);
+            if (foundLocations.length > 0) recs.targeting.location.values = [...new Set(foundLocations)];
+
+            // Ad Format Selection
+            recs.adFormat = allAdFormats[recs.objective][0];
+            const mentionedAdFormat = allAdFormats[recs.objective].find(format => lowercased.includes(format.toLowerCase().replace(/ ad$/, '')));
+            if (mentionedAdFormat) recs.adFormat = mentionedAdFormat;
+            
+            // Article Selection
+            const objectiveArticle = helpArticles.find(a => a.category === recs.objective);
+            const adFormatArticle = helpArticles.find(a => a.adType === recs.adFormat);
+            recs.recommendedArticleIds = [objectiveArticle?.id, adFormatArticle?.id, 'targeting_options', 'targeting_size'].filter(Boolean);
+
+            return recs;
+        }
+
+        function renderRecommendations() {
+            const step2Div = document.getElementById('step-2');
+            step2Div.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">AI-Powered Recommendations</h2>
+                    <button id="edit-recommendations-btn" class="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition"></button>
+                </div>
+                <div id="recommendations-container" class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Campaign Objective</h3>
+                        <div id="objective-display" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200"></div>
+                        <select id="objective-select" class="hidden mt-2 w-full p-2 border border-gray-300 rounded-lg"></select>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Ad Formats</h3>
+                        <div id="ad-formats-container" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 space-y-2"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Targeting Options</h3>
+                        <div id="targeting-display" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 space-y-2"></div>
+                        <p id="targeting-note" class="text-xs text-gray-500 mt-2 italic">Please note: to select more targeting options, click the 'Edit' button.</p>
+                        <div id="targeting-edit" class="hidden mt-2 space-y-2"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Recommended Help Articles</h3>
+                        <div id="help-articles-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                        <p class="text-xs text-gray-500 mt-2 italic">Please note: these are all forecasted results and don't guarantee results.</p>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-between">
+                    <button id="back-to-step-1" class="px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition-colors">Back</button>
+                    <button id="go-to-step-3" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow">Preview Campaign</button>
+                </div>
+            `;
+            const objectiveData = allObjectives.find(o => o.id === state.finalSelection.objective);
+            document.getElementById('objective-display').innerHTML = `<p class="font-bold text-lg text-blue-700">${objectiveData.name}</p><p class="text-gray-600">${objectiveData.description}</p>`;
+            document.getElementById('targeting-display').innerHTML = renderTargetingSummary(state.finalSelection.targeting) || '<p>No specific targeting recommended. Please edit to add criteria.</p>';
+            renderAdFormatOptions();
+            renderHelpArticles();
+            addAssistantEventListeners();
+        }
+        
+        function renderHelpArticles() {
+            const helpArticlesContainer = document.getElementById('help-articles-container');
+            helpArticlesContainer.innerHTML = state.finalSelection.recommendedArticleIds.slice(0, 4).map(id => {
+                const article = helpArticles.find(a => a.id === id);
+                if (!article) return '';
+                return `
+                    <a href="${article.url}" target="_blank" class="block p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300 help-article-card">
+                        <h4 class="font-semibold text-blue-800">${article.title}</h4>
+                        <p class="text-sm text-gray-600 mt-1">${article.snippet}</p>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        function renderEditMode() {
+            const isEditing = state.isEditing;
+            const editBtn = document.getElementById('edit-recommendations-btn');
+            editBtn.innerHTML = isEditing ? `<i data-lucide="save" class="mr-2 h-4 w-4"></i> Save` : `<i data-lucide="edit-2" class="mr-2 h-4 w-4"></i> Edit`;
+            lucide.createIcons();
+
+            document.getElementById('targeting-display').classList.toggle('hidden', isEditing);
+            document.getElementById('targeting-edit').classList.toggle('hidden', !isEditing);
+            document.getElementById('objective-display').classList.toggle('hidden', isEditing);
+            document.getElementById('objective-select').classList.toggle('hidden', !isEditing);
+            document.getElementById('targeting-note').classList.toggle('hidden', isEditing);
+            
+            if (isEditing) {
+                document.getElementById('objective-select').innerHTML = allObjectives.map(o => `<option value="${o.id}" ${o.id === state.finalSelection.objective ? 'selected' : ''}>${o.name}</option>`).join('');
+                
+                const t = state.finalSelection.targeting;
+                document.getElementById('targeting-edit').innerHTML = `
+                    ${createDetailSection('Location', createAutocompleteInput('Locations', 'targeting-location-values', t.location.values, autocompleteData.locations))}
+                    ${createDetailSection('Company', `<div class="space-y-4">
+                        ${createAutocompleteInput('Company Names', 'targeting-company-names', t.company.companyNames, autocompleteData.companyNames)}
+                        ${createAutocompleteInput('Industries', 'targeting-company-industries', t.company.industries, autocompleteData.industries)}
+                        ${createCheckboxGroup('Company Category', 'targeting-company-category', ['S&P 500', 'Fortune 500 (US only)', 'LinkedIn News Editors\' Top Companies'], t.company.companyCategory)}
+                        ${createCheckboxGroup('Company Size', 'targeting-company-size', ['1-10 employees', '11-50 employees', '51-200 employees', '201-500 employees', '501-1000 employees', '1001-5000 employees', '5001-10,000 employees', '10,001+ employees'], t.company.companySize)}
+                        ${createCheckboxGroup('Company Growth Rate', 'targeting-company-growth', ['Negative growth', '0-3% growth', '3-10% growth', '10%+ growth'], t.company.companyGrowthRate)}
+                        ${createCheckboxGroup('Company Revenue', 'targeting-company-revenue', ['$0-1M', '$1-10M', '$10-100M', '$100M+'], t.company.companyRevenue)}
+                        ${createCheckboxInput('Company Connections', 'targeting-company-connections', t.company.companyConnections)}
+                        ${createCheckboxInput('Followers of my Company Page', 'targeting-company-followers', t.company.companyFollowers)}
+                    </div>`)}
+                    ${createDetailSection('Job Experience', `<div class="space-y-4">
+                        ${createAutocompleteInput('Job Titles', 'targeting-job-titles', t.jobExperience.jobTitles, autocompleteData.jobTitles)}
+                        ${createAutocompleteInput('Member Skills', 'targeting-member-skills', t.jobExperience.memberSkills, autocompleteData.skills)}
+                        ${createCheckboxGroup('Job Seniority', 'targeting-job-seniorities', ['Unpaid', 'Training', 'Entry-level', 'Senior', 'Manager', 'Director', 'VP', 'CXO', 'Partner', 'Owner'], t.jobExperience.jobSeniorities)}
+                        ${createCheckboxGroup('Years of Experience', 'targeting-years-experience', ['0-1 Year', '1-3 Years', '3-5 Years', '6-10 Years', '10+ Years'], t.jobExperience.yearsOfExperience)}
+                    </div>`)}
+                     ${createDetailSection('Education', `<div class="space-y-4">
+                        ${createAutocompleteInput('Degrees', 'targeting-education-degrees', t.education.degrees, autocompleteData.degrees)}
+                        ${createAutocompleteInput('Fields of Study', 'targeting-education-fields', t.education.fieldsOfStudy, autocompleteData.fieldsOfStudy)}
+                        ${createAutocompleteInput('Member Schools', 'targeting-education-schools', t.education.memberSchools, autocompleteData.memberSchools)}
+                    </div>`)}
+                     ${createDetailSection('Demographics', `<div class="space-y-4">
+                        ${createCheckboxGroup('Member Age', 'targeting-demographics-age', ['18-24', '25-34', '35-54', '55+'], t.demographics.memberAge)}
+                        ${createCheckboxGroup('Member Gender', 'targeting-demographics-gender', ['Male', 'Female'], t.demographics.memberGender)}
+                    </div>`)}
+                     ${createDetailSection('Interests and Traits', `<div class="space-y-4">
+                       ${createAutocompleteInput('Member Interests', 'targeting-interests-interests', t.interests.memberInterests, autocompleteData.memberInterests)}
+                       ${createAutocompleteInput('Member Groups', 'targeting-interests-groups', t.interests.memberGroups, autocompleteData.memberGroups)}
+                    </div>`)}
+                `;
+                setupAutocompleteListeners();
+            }
+        }
+        
+        function createDetailSection(title, content) {
+            return `<details class="bg-white shadow-sm rounded-lg border border-gray-200"><summary class="p-4 cursor-pointer flex justify-between items-center font-semibold text-gray-700">${title}<i data-lucide="chevron-down" class="transition-transform"></i></summary><div class="p-4 border-t border-gray-200">${content}</div></details>`;
+        }
+        
+        function createAutocompleteInput(label, id, selectedValues, suggestions) {
+            const tagsHTML = selectedValues.map(val => `
+                <span class="tag" data-value="${val}">
+                    ${val}
+                    <i data-lucide="x" class="tag-remove h-4 w-4"></i>
+                </span>
+            `).join('');
+
+            return `
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">${label}</label>
+                    <div id="${id}-tags" class="mt-1 flex flex-wrap gap-2 mb-2">${tagsHTML}</div>
+                    <div class="relative">
+                        <input type="text" id="${id}-input" data-suggestions='${JSON.stringify(suggestions)}' data-target="${id}" class="block w-full rounded-md border-gray-300 shadow-sm" placeholder="Type to search...">
+                        <div id="${id}-suggestions" class="autocomplete-suggestions hidden"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createCheckboxGroup(label, name, options, selectedValues) {
+            let checkboxesHTML = options.map(option => `
+                <label class="flex items-center">
+                    <input type="checkbox" name="${name}" value="${option}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" ${selectedValues.includes(option) ? 'checked' : ''}>
+                    <span class="ml-2 text-sm text-gray-700">${option}</span>
+                </label>
+            `).join('');
+            return `<div><label class="block text-sm font-medium text-gray-700">${label}</label><div class="mt-2 space-y-2">${checkboxesHTML}</div></div>`;
+        }
+        function createCheckboxInput(label, id, checked) {
+            return `<div class="flex items-center"><input type="checkbox" id="${id}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" ${checked ? 'checked' : ''}><label for="${id}" class="ml-2 block text-sm text-gray-900">${label}</label></div>`;
+        }
+
+        function renderAdFormatOptions() {
+            const adFormatsContainer = document.getElementById('ad-formats-container');
+            const compatibleFormats = allAdFormats[state.finalSelection.objective] || [];
+            adFormatsContainer.innerHTML = compatibleFormats.map(format => `<label class="flex items-center p-3 rounded-lg border has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500"><input type="radio" name="ad-format" value="${format}" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" ${format === state.finalSelection.adFormat ? 'checked' : ''}><span class="ml-3 font-medium text-gray-700">${format}</span></label>`).join('');
+            document.querySelectorAll('input[name="ad-format"]').forEach(radio => radio.addEventListener('change', (e) => {
+                state.finalSelection.adFormat = e.target.value;
+                const objectiveArticle = helpArticles.find(a => a.category === state.finalSelection.objective);
+                const adFormatArticle = helpArticles.find(a => a.adType === state.finalSelection.adFormat);
+                state.finalSelection.recommendedArticleIds = [objectiveArticle?.id, adFormatArticle?.id, 'targeting_options', 'targeting_size'].filter(Boolean);
+                renderHelpArticles();
+            }));
+        }
+
+        function handleEditToggle() {
+            if (state.isEditing) { // Saving
+                const getTags = id => Array.from(document.querySelectorAll(`#${id}-tags .tag`)).map(tag => tag.dataset.value);
+                const getChecked = id => document.getElementById(id).checked;
+                const getCheckboxGroup = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+
+                state.finalSelection.targeting = {
+                    location: { values: getTags('targeting-location-values') },
+                    company: { 
+                        companyNames: getTags('targeting-company-names'),
+                        industries: getTags('targeting-company-industries'),
+                        companyCategory: getCheckboxGroup('targeting-company-category'),
+                        companySize: getCheckboxGroup('targeting-company-size'),
+                        companyGrowthRate: getCheckboxGroup('targeting-company-growth'),
+                        companyRevenue: getCheckboxGroup('targeting-company-revenue'),
+                        companyConnections: getChecked('targeting-company-connections'),
+                        companyFollowers: getChecked('targeting-company-followers'),
+                    },
+                    jobExperience: {
+                        jobTitles: getTags('targeting-job-titles'),
+                        memberSkills: getTags('targeting-member-skills'),
+                        jobSeniorities: getCheckboxGroup('targeting-job-seniorities'),
+                        yearsOfExperience: getCheckboxGroup('targeting-years-experience')
+                    },
+                    education: {
+                        degrees: getTags('targeting-education-degrees'),
+                        fieldsOfStudy: getTags('targeting-education-fields'),
+                        memberSchools: getTags('targeting-education-schools'),
+                    },
+                    demographics: {
+                        memberAge: getCheckboxGroup('targeting-demographics-age'),
+                        memberGender: getCheckboxGroup('targeting-demographics-gender'),
+                    },
+                    interests: {
+                        memberInterests: getTags('targeting-interests-interests'),
+                        memberGroups: getTags('targeting-interests-groups'),
+                    }
+                };
+            }
+            state.isEditing = !state.isEditing;
+            updateUI();
+        }
+
+        function handleObjectiveChange() {
+             state.finalSelection.objective = document.getElementById('objective-select').value;
+             const compatibleFormats = allAdFormats[state.finalSelection.objective] || [];
+             if (!compatibleFormats.includes(state.finalSelection.adFormat)) {
+                 state.finalSelection.adFormat = compatibleFormats[0];
+             }
+             renderAdFormatOptions();
+             const objectiveArticle = helpArticles.find(a => a.category === state.finalSelection.objective);
+             const adFormatArticle = helpArticles.find(a => a.adType === state.finalSelection.adFormat);
+             state.finalSelection.recommendedArticleIds = [objectiveArticle?.id, adFormatArticle?.id, 'targeting_options', 'targeting_size'].filter(Boolean);
+             renderHelpArticles();
+        }
+
+        function renderTargetingSummary(targeting) {
+            let html = '';
+            const addLine = (label, value) => { if (value && (!Array.isArray(value) || value.length > 0)) html += `<p><strong>${label}:</strong> ${Array.isArray(value) ? value.join(', ') : value}</p>`; };
+            
+            addLine('Locations', targeting.location.values);
+            addLine('Company Names', targeting.company.companyNames);
+            addLine('Industries', targeting.company.industries);
+            addLine('Company Category', targeting.company.companyCategory);
+            addLine('Company Sizes', targeting.company.companySize);
+            addLine('Company Growth', targeting.company.companyGrowthRate);
+            addLine('Company Revenue', targeting.company.companyRevenue);
+            if (targeting.company.companyConnections) addLine('Company Connections', 'Targeting 1st-degree connections');
+            if (targeting.company.companyFollowers) addLine('Followers of my Company Page', 'Targeting page followers');
+            
+            addLine('Job Titles', targeting.jobExperience.jobTitles);
+            addLine('Seniorities', targeting.jobExperience.jobSeniorities);
+            addLine('Years of Experience', targeting.jobExperience.yearsOfExperience);
+            addLine('Member Skills', targeting.jobExperience.memberSkills);
+            
+            addLine('Degrees', targeting.education.degrees);
+            addLine('Fields of Study', targeting.education.fieldsOfStudy);
+            addLine('Schools', targeting.education.memberSchools);
+
+            addLine('Age', targeting.demographics.memberAge);
+            addLine('Gender', targeting.demographics.memberGender);
+
+            addLine('Interests', targeting.interests.memberInterests);
+            addLine('Groups', targeting.interests.memberGroups);
+            
+            return html;
+        }
+
+        function renderPreview() {
+            const step3Div = document.getElementById('step-3');
+            step3Div.innerHTML = `
+                <h2 class="text-2xl font-bold text-gray-800">Campaign Preview</h2>
+                <p class="mt-2 text-gray-500">Review your campaign setup below. You can add budget and creatives after launching.</p>
+                <div class="mt-6 bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-xl font-bold text-gray-900 border-b pb-2">Campaign Group: <span id="preview-group-name" class="font-normal"></span></h3>
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div><h4 class="font-semibold text-gray-600">Campaign Objective</h4><p id="preview-objective" class="mt-1 text-gray-800"></p></div>
+                        <div><h4 class="font-semibold text-gray-600">Ad Format</h4><p id="preview-ad-format" class="mt-1 text-gray-800"></p></div>
+                    </div>
+                    <div class="mt-6"><h4 class="font-semibold text-gray-600">Targeting</h4><div id="preview-targeting" class="mt-1 text-gray-800 p-4 bg-gray-50 rounded-md"></div></div>
+                </div>
+                <div class="mt-8 flex justify-between">
+                    <button id="back-to-step-2" class="px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition-colors">Back</button>
+                    <button id="create-campaign-btn" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg">
+                        Create Campaign
+                    </button>
+                </div>
+            `;
+            document.getElementById('preview-group-name').textContent = `Campaign for "${state.campaignDescription.substring(0, 30)}..."`;
+            const objectiveData = allObjectives.find(o => o.id === state.finalSelection.objective);
+            document.getElementById('preview-objective').textContent = objectiveData.name;
+            document.getElementById('preview-ad-format').textContent = state.finalSelection.adFormat;
+            document.getElementById('preview-targeting').innerHTML = renderTargetingSummary(state.finalSelection.targeting) || '<p>No targeting criteria specified.</p>';
+            addAssistantEventListeners();
+            lucide.createIcons();
+        }
+
+        function renderCampaignManagerDashboard() {
+            campaignManagerDashboard.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            <a href="#" id="cm-tab-groups" class="cm-tab border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Campaign groups</a>
+                            <a href="#" id="cm-tab-campaigns" class="cm-tab border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Campaigns</a>
+                            <a href="#" id="cm-tab-ads" class="cm-tab border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Ads</a>
+                        </nav>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <div><button id="create-new-campaign-btn-2" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-700">Create</button></div>
+                        <div class="flex space-x-4">
+                            <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-50">Performance chart</button>
+                            <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-50">Professional demographics</button>
+                            <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-50">Export</button>
+                        </div>
+                    </div>
+                    
+                    <div id="cm-groups-view" class="mt-4 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><input type="checkbox" class="rounded"></th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign group name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">On/Off</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap"><input type="checkbox" class="rounded"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-blue-600 cursor-pointer hover:underline" id="cm-group-name"></div>
+                                        <div class="text-xs text-gray-500" id="cm-group-id"></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Not delivering</span><div class="text-xs text-gray-500">Payment method required</div></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="cm-campaigns-view" class="hidden mt-4 overflow-x-auto">
+                         <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><input type="checkbox" class="rounded"></th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key results</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign group</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap"><input type="checkbox" class="rounded"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-blue-600 cursor-pointer hover:underline" id="cm-campaign-name-2"></div>
+                                        <div class="text-xs text-gray-500" id="cm-campaign-id-2"></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Draft</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="cm-campaign-key-results"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="cm-campaign-group-link"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            addManagerEventListeners();
+            const objectiveData = allObjectives.find(o => o.id === state.finalSelection.objective);
+            document.getElementById('cm-group-name').textContent = `New ${objectiveData.name} Group`;
+            document.getElementById('cm-group-id').textContent = `ID: ${Math.floor(100000000 + Math.random() * 900000000)}`;
+            document.getElementById('cm-campaign-name-2').textContent = `New ${state.finalSelection.adFormat} Campaign`;
+            document.getElementById('cm-campaign-id-2').textContent = `ID: ${Math.floor(100000000 + Math.random() * 900000000)}`;
+            document.getElementById('cm-campaign-key-results').textContent = objectiveData.name;
+            document.getElementById('cm-campaign-group-link').textContent = `New ${objectiveData.name} Group`;
+        }
+        
+        function renderEditCampaignGroup() {
+            const objectiveData = allObjectives.find(o => o.id === state.finalSelection.objective);
+            editCampaignGroupView.innerHTML = `
+                <div class="max-w-3xl mx-auto">
+                    <button id="back-to-dashboard-btn" class="flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
+                        <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i> Back to Campaign groups
+                    </button>
+                    <h1 class="text-2xl font-bold text-gray-900">Edit campaign group</h1>
+                    <div class="mt-6 bg-white p-8 rounded-lg shadow-md space-y-8">
+                        <div>
+                            <h3 class="text-lg font-medium">Details</h3>
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                <input type="text" value="New ${objectiveData.name} Group" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                             <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700">Status</label>
+                                <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"><option>Active</option><option>Draft</option></select>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium">Group objective</h3>
+                            <div class="mt-4 p-4 bg-gray-100 rounded-md">
+                                <p class="text-sm font-semibold">${objectiveData.name}</p>
+                                <p class="text-xs text-gray-600 mt-1">${objectiveData.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            addManagerEventListeners();
+            lucide.createIcons();
+        }
+        
+        function renderEditCampaign() {
+            const objectiveData = allObjectives.find(o => o.id === state.finalSelection.objective);
+            editCampaignView.innerHTML = `
+                <div>
+                     <button id="back-to-dashboard-btn-2" class="flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
+                        <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i> Back to Campaign Manager
+                    </button>
+                    <h1 class="text-2xl font-bold text-gray-900">New ${state.finalSelection.adFormat} Campaign</h1>
+                    <p class="text-sm text-gray-500">Part of "New ${objectiveData.name} Group"</p>
+                    <div class="mt-6 bg-white p-8 rounded-lg shadow-md">
+                        <h3 class="text-lg font-medium">Campaign Details</h3>
+                        <p class="mt-2 text-sm text-gray-600">This is a simplified view of the campaign settings you chose.</p>
+                        <div class="mt-4 space-y-4">
+                            <div><strong>Objective:</strong> ${objectiveData.name}</div>
+                            <div><strong>Ad Format:</strong> ${state.finalSelection.adFormat}</div>
+                            <div><h4 class="font-semibold mt-4 mb-2">Targeting:</h4><div class="p-4 bg-gray-50 rounded-md">${renderTargetingSummary(state.finalSelection.targeting)}</div></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            addManagerEventListeners();
+            lucide.createIcons();
+        }
+
+        function addAssistantEventListeners() {
+            document.getElementById('get-recommendations-btn')?.addEventListener('click', handleGetRecommendations);
+            document.getElementById('edit-recommendations-btn')?.addEventListener('click', handleEditToggle);
+            document.getElementById('objective-select')?.addEventListener('change', handleObjectiveChange);
+            document.getElementById('back-to-step-1')?.addEventListener('click', () => { state.assistantStep = 1; state.isEditing = false; updateUI(); });
+            document.getElementById('go-to-step-3')?.addEventListener('click', () => { if (state.isEditing) { alert("Please save your changes first."); return; } state.assistantStep = 3; updateUI(); });
+            document.getElementById('back-to-step-2')?.addEventListener('click', () => { state.assistantStep = 2; updateUI(); });
+            document.getElementById('create-campaign-btn')?.addEventListener('click', () => { state.currentView = 'manager'; state.managerView = 'dashboard'; updateUI(); });
+        }
+
+        function addManagerEventListeners() {
+            document.getElementById('create-new-campaign-btn-2')?.addEventListener('click', () => {
+                state.currentView = 'assistant';
+                state.assistantStep = 1;
+                state.campaignDescription = '';
+                state.finalSelection = { objective: '', targeting: JSON.parse(JSON.stringify(initialTargetingState)), adFormat: '' };
+                updateUI();
+            });
+            document.querySelectorAll('.cm-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.cm-tab').forEach(t => {
+                        t.classList.remove('border-blue-500', 'text-blue-600');
+                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    });
+                    tab.classList.add('border-blue-500', 'text-blue-600');
+                    tab.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    
+                    document.getElementById('cm-groups-view').classList.toggle('hidden', tab.id !== 'cm-tab-groups');
+                    document.getElementById('cm-campaigns-view').classList.toggle('hidden', tab.id !== 'cm-tab-campaigns');
+                });
+            });
+            document.getElementById('cm-group-name')?.addEventListener('click', () => {
+                state.managerView = 'editGroup';
+                updateUI();
+            });
+            document.getElementById('cm-campaign-name-2')?.addEventListener('click', () => {
+                state.managerView = 'editCampaign';
+                updateUI();
+            });
+            document.getElementById('back-to-dashboard-btn')?.addEventListener('click', () => {
+                state.managerView = 'dashboard';
+                updateUI();
+            });
+             document.getElementById('back-to-dashboard-btn-2')?.addEventListener('click', () => {
+                state.managerView = 'dashboard';
+                updateUI();
+            });
+        }
+        
+        // Initial UI setup
+        updateUI();
+    </script>
+</body>
+</html>
