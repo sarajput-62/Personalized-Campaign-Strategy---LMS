@@ -986,6 +986,68 @@
             });
         }
         
+        function setupAutocompleteListeners() {
+            document.querySelectorAll('input[data-suggestions]').forEach(input => {
+                const suggestionsContainer = document.getElementById(input.id.replace('-input', '-suggestions'));
+                const tagsContainer = document.getElementById(input.id.replace('-input', '-tags'));
+                const suggestions = JSON.parse(input.dataset.suggestions);
+
+                const showSuggestions = () => {
+                    const value = input.value.toLowerCase();
+                    suggestionsContainer.innerHTML = '';
+                    if (value) {
+                        const filtered = suggestions.filter(s => s.toLowerCase().includes(value));
+                        filtered.forEach(s => {
+                            const item = document.createElement('div');
+                            item.className = 'suggestion-item';
+                            item.textContent = s;
+                            item.addEventListener('click', () => {
+                                addTag(tagsContainer, s);
+                                input.value = '';
+                                suggestionsContainer.classList.add('hidden');
+                            });
+                            suggestionsContainer.appendChild(item);
+                        });
+                        suggestionsContainer.classList.toggle('hidden', filtered.length === 0);
+                    } else {
+                        suggestionsContainer.classList.add('hidden');
+                    }
+                };
+                
+                input.addEventListener('input', showSuggestions);
+                input.addEventListener('focus', showSuggestions);
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && input.value) {
+                        e.preventDefault();
+                        addTag(tagsContainer, input.value);
+                        input.value = '';
+                        suggestionsContainer.classList.add('hidden');
+                    }
+                });
+            });
+
+            document.body.addEventListener('click', (e) => {
+                if (e.target.closest('.tag-remove')) {
+                    e.target.closest('.tag').remove();
+                } else if (!e.target.closest('[data-suggestions]')) {
+                     document.querySelectorAll('.autocomplete-suggestions').forEach(s => s.classList.add('hidden'));
+                }
+            });
+        }
+
+        function addTag(container, value) {
+             // Prevent duplicates
+            if (Array.from(container.children).some(tag => tag.dataset.value === value)) return;
+
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.dataset.value = value;
+            tag.innerHTML = `${value} <i data-lucide="x" class="tag-remove h-4 w-4"></i>`;
+            container.appendChild(tag);
+            lucide.createIcons();
+        }
+
         // Initial UI setup
         updateUI();
     </script>
